@@ -1,0 +1,232 @@
+// copied from users/manna-harbour_miryoku/manna-harbour_miryoku.h
+// generated from users/manna-harbour_miryoku/miryoku.org  -*- buffer-read-only: t -*-
+
+// disable for customisation
+//#pragma once
+
+#include QMK_KEYBOARD_H
+
+#define U_NP KC_NO // key is not present
+#define U_NA KC_NO // present but not available for use
+#define U_NU KC_NO // available but not used
+
+enum layers { BASE, MBO, MEDR, NAVR, MOUR, NSSL, NSL, FUNL };
+
+#if defined MIRYOKU_CLIPBOARD_FUN
+#define U_RDO KC_AGIN
+#define U_PST KC_PSTE
+#define U_CPY KC_COPY
+#define U_CUT KC_CUT
+#define U_UND KC_UNDO
+#elif defined MIRYOKU_CLIPBOARD_MAC
+#define U_RDO SCMD(KC_Z)
+#define U_PST LCMD(KC_V)
+#define U_CPY LCMD(KC_C)
+#define U_CUT LCMD(KC_X)
+#define U_UND LCMD(KC_Z)
+#elif defined MIRYOKU_CLIPBOARD_WIN
+#define U_RDO C(KC_Y)
+#define U_PST C(KC_V)
+#define U_CPY C(KC_C)
+#define U_CUT C(KC_X)
+#define U_UND C(KC_Z)
+#else
+#define U_RDO KC_AGIN
+#define U_PST S(KC_INS)
+#define U_CPY C(KC_INS)
+#define U_CUT S(KC_DEL)
+#define U_UND KC_UNDO
+#endif
+
+// copied from users/manna-harbour_miryoku/manna-harbour_miryoku.c
+// generated from users/manna-harbour_miryoku/miryoku.org  -*- buffer-read-only: t -*-
+
+// disable for customisation
+//#include "manna-harbour_miryoku.h"
+
+const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
+#if defined MIRYOKU_ALPHAS_COLEMAK
+  [BASE] = LAYOUT_miryoku(
+    KC_Q,              KC_W,              KC_F,              KC_P,              KC_G,              KC_J,              KC_L,              KC_U,              KC_Y,              KC_QUOT,
+    LGUI_T(KC_A),      LALT_T(KC_R),      LCTL_T(KC_S),      LSFT_T(KC_T),      KC_D,              KC_H,              LSFT_T(KC_N),      LCTL_T(KC_E),      LALT_T(KC_I),      LGUI_T(KC_O),
+    KC_Z,              ALGR_T(KC_X),      KC_C,              KC_V,              KC_B,              KC_K,              KC_M,              KC_COMM,           ALGR_T(KC_DOT),    KC_SLSH,
+    U_NP,              U_NP,              LT(MEDR, KC_ESC),  LT(NAVR, KC_SPC),  LT(MOUR, KC_TAB),  LT(NSSL, KC_ENT),  LT(NSL, KC_BSPC),  LT(FUNL, KC_DEL),  U_NP,              U_NP
+  ),
+#elif defined MIRYOKU_ALPHAS_COLEMAKDH
+  [BASE] = LAYOUT_miryoku(
+    KC_Q,              KC_W,              KC_F,              KC_P,              KC_B,              KC_J,              KC_L,              KC_U,              KC_Y,              KC_QUOT,
+    LGUI_T(KC_A),      LALT_T(KC_R),      LCTL_T(KC_S),      LSFT_T(KC_T),      KC_G,              KC_K,              LSFT_T(KC_N),      LCTL_T(KC_E),      LALT_T(KC_I),      LGUI_T(KC_O),
+    KC_Z,              ALGR_T(KC_X),      KC_C,              KC_D,              KC_V,              KC_M,              KC_H,              KC_COMM,           ALGR_T(KC_DOT),    KC_SLSH,
+    U_NP,              U_NP,              LT(MEDR, KC_ESC),  LT(NAVR, KC_SPC),  LT(MOUR, KC_TAB),  LT(NSSL, KC_ENT),  LT(NSL, KC_BSPC),  LT(FUNL, KC_DEL),  U_NP,              U_NP
+  ),
+#elif defined MIRYOKU_ALPHAS_DVORAK
+  [BASE] = LAYOUT_miryoku(
+    KC_QUOT,           KC_COMM,           KC_DOT,            KC_P,              KC_Y,              KC_F,              KC_G,              KC_C,              KC_R,              KC_L,
+    LGUI_T(KC_A),      LALT_T(KC_O),      LCTL_T(KC_E),      LSFT_T(KC_U),      KC_I,              KC_D,              LSFT_T(KC_H),      LCTL_T(KC_T),      LALT_T(KC_N),      LGUI_T(KC_S),
+    KC_SLSH,           ALGR_T(KC_Q),      KC_J,              KC_K,              KC_X,              KC_B,              KC_M,              KC_W,              ALGR_T(KC_V),      KC_Z,
+    U_NP,              U_NP,              LT(MEDR, KC_ESC),  LT(NAVR, KC_SPC),  LT(MOUR, KC_TAB),  LT(NSSL, KC_ENT),  LT(NSL, KC_BSPC),  LT(FUNL, KC_DEL),  U_NP,              U_NP
+  ),
+#elif defined MIRYOKU_ALPHAS_HALMAK
+  [BASE] = LAYOUT_miryoku(
+    KC_W,              KC_L,              KC_R,              KC_B,              KC_Z,              KC_QUOT,           KC_Q,              KC_U,              KC_D,              KC_J,
+    LGUI_T(KC_S),      LALT_T(KC_H),      LCTL_T(KC_N),      LSFT_T(KC_T),      KC_COMM,           KC_DOT,            LSFT_T(KC_A),      LCTL_T(KC_E),      LALT_T(KC_O),      LGUI_T(KC_I),
+    KC_F,              ALGR_T(KC_M),      KC_V,              KC_C,              KC_SLSH,           KC_G,              KC_P,              KC_X,              ALGR_T(KC_K),      KC_Y,
+    U_NP,              U_NP,              LT(MEDR, KC_ESC),  LT(NAVR, KC_SPC),  LT(MOUR, KC_TAB),  LT(NSSL, KC_ENT),  LT(NSL, KC_BSPC),  LT(FUNL, KC_DEL),  U_NP,              U_NP
+  ),
+#elif defined MIRYOKU_ALPHAS_WORKMAN
+  [BASE] = LAYOUT_miryoku(
+    KC_Q,              KC_D,              KC_R,              KC_W,              KC_B,              KC_J,              KC_F,              KC_U,              KC_P,              KC_QUOT,
+    LGUI_T(KC_A),      LALT_T(KC_S),      LCTL_T(KC_H),      LSFT_T(KC_T),      KC_G,              KC_Y,              LSFT_T(KC_N),      LCTL_T(KC_E),      LALT_T(KC_O),      LGUI_T(KC_I),
+    KC_Z,              ALGR_T(KC_X),      KC_M,              KC_C,              KC_V,              KC_K,              KC_L,              KC_COMM,           ALGR_T(KC_DOT),    KC_SLSH,
+    U_NP,              U_NP,              LT(MEDR, KC_ESC),  LT(NAVR, KC_SPC),  LT(MOUR, KC_TAB),  LT(NSSL, KC_ENT),  LT(NSL, KC_BSPC),  LT(FUNL, KC_DEL),  U_NP,              U_NP
+  ),
+#elif defined MIRYOKU_ALPHAS_QWERTY
+  [BASE] = LAYOUT_miryoku(
+    KC_Q,              KC_W,              KC_E,              KC_R,              KC_T,              KC_Y,              KC_U,              KC_I,              KC_O,              KC_P,
+    LGUI_T(KC_A),      LALT_T(KC_S),      LCTL_T(KC_D),      LSFT_T(KC_F),      KC_G,              KC_H,              LSFT_T(KC_J),      LCTL_T(KC_K),      LALT_T(KC_L),      LGUI_T(KC_COLN),
+    KC_Z,              ALGR_T(KC_X),      KC_C,              KC_V,              KC_B,              KC_N,              KC_M,              KC_COMM,           ALGR_T(KC_DOT),    KC_SLSH,
+    U_NP,              U_NP,              LT(MEDR, KC_ESC),  LT(NAVR, KC_BSPC), LT(MOUR, KC_DEL),  LT(NSSL, KC_ENT),  LT(NSL, KC_SPC),   LT(FUNL, KC_TAB),  U_NP,              U_NP
+  ),
+#else
+  [BASE] = LAYOUT_miryoku(
+    KC_Q,              KC_W,              KC_F,              KC_P,              KC_B,              KC_J,              KC_L,              KC_U,              KC_Y,              KC_QUOT,
+    LGUI_T(KC_A),      LALT_T(KC_R),      LCTL_T(KC_S),      LSFT_T(KC_T),      KC_G,              KC_M,              LSFT_T(KC_N),      LCTL_T(KC_E),      LALT_T(KC_I),      LGUI_T(KC_O),
+    KC_Z,              ALGR_T(KC_X),      KC_C,              KC_D,              KC_V,              KC_K,              KC_H,              KC_COMM,           ALGR_T(KC_DOT),    KC_SLSH,
+    U_NP,              U_NP,              LT(MEDR, KC_ESC),  LT(NAVR, KC_SPC),  LT(MOUR, KC_TAB),  LT(NSSL, KC_ENT),  LT(NSL, KC_BSPC),  LT(FUNL, KC_DEL),  U_NP,              U_NP
+  ),
+#endif
+#if defined MIRYOKU_NAV_VI
+  [NAVR] = LAYOUT_miryoku(
+    RESET,   U_NA,    U_NA,    U_NA,    U_NA,    U_RDO,   U_PST,   U_CPY,   U_CUT,   U_UND,
+    KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, U_NA,    KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, KC_CAPS,
+    U_NA,    KC_ALGR, U_NA,    U_NA,    U_NA,    KC_HOME, KC_PGDN, KC_PGUP, KC_END,  KC_INS,
+    U_NP,    U_NP,    U_NA,    U_NA,    U_NA,    KC_ENT,  KC_SPC,  KC_TAB,  U_NP,    U_NP
+  ),
+  [MOUR] = LAYOUT_miryoku(
+    RESET,   U_NA,    U_NA,    U_NA,    U_NA,    U_NU,    U_NU,    U_NU,    U_NU,    U_NU,
+    KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, U_NA,    KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, U_NU,
+    U_NA,    KC_ALGR, U_NA,    U_NA,    U_NA,    KC_WH_L, KC_WH_D, KC_WH_U, KC_WH_R, U_NU,
+    U_NP,    U_NP,    U_NA,    U_NA,    U_NA,    KC_BTN1, KC_BTN3, KC_BTN2, U_NP,    U_NP
+  ),
+  [MEDR] = LAYOUT_miryoku(
+    RESET,   U_NA,    U_NA,    U_NA,    U_NA,    RGB_TOG, RGB_MOD, RGB_HUI, RGB_SAI, RGB_VAI,
+    KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, U_NA,    KC_MPRV, KC_VOLD, KC_VOLU, KC_MNXT, U_NU,
+    U_NA,    KC_ALGR, U_NA,    U_NA,    U_NA,    U_NU,    U_NU,    U_NU,    U_NU,    U_NU,
+    U_NP,    U_NP,    U_NA,    U_NA,    U_NA,    KC_MSTP, KC_MPLY, KC_MUTE, U_NP,    U_NP
+  ),
+#else
+  [NAVR] = LAYOUT_miryoku(
+    RESET,   U_NA,    U_NA,    U_NA,    U_NA,    U_RDO,   U_PST,   U_CPY,   U_CUT,   U_UND,
+    KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, U_NA,    KC_CAPS, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT,
+    U_NA,    KC_ALGR, U_NA,    U_NA,    U_NA,    KC_INS,  KC_HOME, KC_PGDN, KC_PGUP, KC_END,
+    U_NP,    U_NP,    U_NA,    U_NA,    U_NA,    KC_ENT,  KC_BSPC, KC_DEL,  U_NP,    U_NP
+  ),
+  [MOUR] = LAYOUT_miryoku(
+    RESET,   U_NA,    U_NA,    U_NA,    U_NA,    U_NU,    U_NU,    U_NU,    U_NU,    U_NU,
+    KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, U_NA,    U_NU,    KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R,
+    U_NA,    KC_ALGR, U_NA,    U_NA,    U_NA,    U_NU,    KC_WH_L, KC_WH_D, KC_WH_U, KC_WH_R,
+    U_NP,    U_NP,    U_NA,    U_NA,    U_NA,    KC_BTN1, KC_BTN3, KC_BTN2, U_NP,    U_NP
+  ),
+  [MEDR] = LAYOUT_miryoku(
+    RESET,   U_NA,    U_NA,    U_NA,    U_NA,    RGB_TOG, RGB_MOD, RGB_HUI, RGB_SAI, RGB_VAI,
+    KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, U_NA,    U_NU,    KC_MPRV, KC_VOLD, KC_VOLU, KC_MNXT,
+    U_NA,    KC_ALGR, U_NA,    U_NA,    U_NA,    U_NU,    U_NU,    U_NU,    U_NU,    U_NU,
+    U_NP,    U_NP,    U_NA,    U_NA,    U_NA,    KC_MSTP, KC_MPLY, KC_MUTE, U_NP,    U_NP
+  ),
+#endif
+  [MBO] = LAYOUT_miryoku(
+    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+    U_NP,    U_NP,    KC_TRNS, KC_TRNS, KC_TRNS, KC_BTN1, KC_BTN3, KC_BTN2, U_NP,    U_NP
+  ),
+  [FUNL] = LAYOUT_miryoku(
+    KC_F12,  KC_F7,   KC_F8,   KC_F9,   KC_PSCR, U_NA,    U_NA,    U_NA,    U_NA,    RESET,
+    KC_F11,  KC_F4,   KC_F5,   KC_F6,   KC_SLCK, U_NA,    KC_LSFT, KC_LCTL, KC_LALT, KC_LGUI,
+    KC_F10,  KC_F1,   KC_F2,   KC_F3,   KC_PAUS, U_NA,    U_NA,    U_NA,    KC_ALGR, U_NA,
+    U_NP,    U_NP,    KC_APP,  KC_BSPC, KC_DEL,  U_NA,    U_NA,    U_NA,    U_NP,    U_NP
+  ),
+  [NSL] = LAYOUT_miryoku(
+    KC_LBRC, KC_7,    KC_8,    KC_9,    KC_RBRC, U_NA,    U_NA,    U_NA,    U_NA,    RESET,
+    KC_SCLN, KC_4,    KC_5,    KC_6,    KC_EQL,  U_NA,    KC_LSFT, KC_LCTL, KC_LALT, KC_LGUI,
+    KC_GRV,  KC_1,    KC_2,    KC_3,    KC_BSLS, U_NA,    U_NA,    U_NA,    KC_ALGR, U_NA,
+    U_NP,    U_NP,    KC_DOT,  KC_0,    KC_MINS, U_NA,    U_NA,    U_NA,    U_NP,    U_NP
+  ),
+  [NSSL] = LAYOUT_miryoku(
+    KC_LCBR, KC_AMPR, KC_ASTR, KC_LPRN, KC_RCBR, U_NA,    U_NA,    U_NA,    U_NA,    RESET,
+    KC_COLN, KC_DLR,  KC_PERC, KC_CIRC, KC_PLUS, U_NA,    KC_LSFT, KC_LCTL, KC_LALT, KC_LGUI,
+    KC_TILD, KC_EXLM, KC_AT,   KC_HASH, KC_PIPE, U_NA,    U_NA,    U_NA,    KC_ALGR, U_NA,
+    U_NP,    U_NP,    KC_LPRN, KC_RPRN, KC_UNDS, U_NA,    U_NA,    U_NA,    U_NP,    U_NP
+  )
+};
+
+// copied from keymaps/default/keymap.c
+
+void matrix_init_user(void) {
+    #ifdef RGBLIGHT_ENABLE
+      RGB_current_mode = rgblight_config.mode;
+    #endif
+    //SSD1306 OLED init, make sure to add #define SSD1306OLED in config.h
+    #ifdef SSD1306OLED
+        iota_gfx_init(!has_usb());   // turns on the display
+    #endif
+}
+
+//SSD1306 OLED update loop, make sure to add #define SSD1306OLED in config.h
+#ifdef SSD1306OLED
+
+// When add source files to SRC in rules.mk, you can use functions.
+const char *read_layer_state(void);
+const char *read_logo(void);
+void set_keylog(uint16_t keycode, keyrecord_t *record);
+const char *read_keylog(void);
+const char *read_keylogs(void);
+
+// const char *read_mode_icon(bool swap);
+// const char *read_host_led_state(void);
+// void set_timelog(void);
+// const char *read_timelog(void);
+
+void matrix_scan_user(void) {
+   iota_gfx_task();
+}
+
+void matrix_render_user(struct CharacterMatrix *matrix) {
+  if (is_master) {
+    // If you want to change the display of OLED, you need to change here
+    matrix_write_ln(matrix, read_layer_state());
+    matrix_write_ln(matrix, read_keylog());
+    //matrix_write_ln(matrix, read_keylogs());
+    //matrix_write_ln(matrix, read_mode_icon(keymap_config.swap_lalt_lgui));
+    //matrix_write_ln(matrix, read_host_led_state());
+    //matrix_write_ln(matrix, read_timelog());
+  } else {
+    matrix_write(matrix, read_logo());
+  }
+}
+
+void matrix_update(struct CharacterMatrix *dest, const struct CharacterMatrix *source) {
+  if (memcmp(dest->display, source->display, sizeof(dest->display))) {
+    memcpy(dest->display, source->display, sizeof(dest->display));
+    dest->dirty = true;
+  }
+}
+
+void iota_gfx_task_user(void) {
+  struct CharacterMatrix matrix;
+  matrix_clear(&matrix);
+  matrix_render_user(&matrix);
+  matrix_update(&display, &matrix);
+}
+#endif//SSD1306OLED
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+  if (record->event.pressed) {
+#ifdef SSD1306OLED
+    set_keylog(keycode, record);
+#endif
+    // set_timelog();
+  }
+
+  return true;
+}
