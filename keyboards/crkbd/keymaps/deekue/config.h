@@ -58,5 +58,4 @@ KC_LSFT, K20,   K21,   K22,   K23,   K24,   K25,   K26,   K27,   K28,   K29,   K
 #define USE_SERIAL_PD2
 
 #define SSD1306OLED
-#define OLED_FONT_H "keyboards/crkbd/lib/glcdfont.c"
 

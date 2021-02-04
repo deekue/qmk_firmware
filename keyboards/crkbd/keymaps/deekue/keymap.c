@@ -11,6 +11,7 @@
 #define U_NU KC_NO // available but not used
 
 enum layers { BASE, MBO, MEDR, NAVR, MOUR, NSSL, NSL, FUNL };
+// TODO: add array of layer labels, matching idex to layers
 
 #if defined MIRYOKU_CLIPBOARD_FUN
 #define U_RDO KC_AGIN
@@ -162,6 +163,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 // copied from keymaps/default/keymap.c
 
+extern uint8_t is_master;
+
+
 void matrix_init_user(void) {
     #ifdef RGBLIGHT_ENABLE
       RGB_current_mode = rgblight_config.mode;
@@ -194,12 +198,38 @@ void matrix_scan_user(void) {
 void matrix_render_user(struct CharacterMatrix *matrix) {
   if (is_master) {
     // If you want to change the display of OLED, you need to change here
-    matrix_write_ln(matrix, read_layer_state());
-    matrix_write_ln(matrix, read_keylog());
+    //matrix_write_ln(matrix, read_layer_state());
+    //matrix_write_ln(matrix, read_keylog());
     //matrix_write_ln(matrix, read_keylogs());
     //matrix_write_ln(matrix, read_mode_icon(keymap_config.swap_lalt_lgui));
     //matrix_write_ln(matrix, read_host_led_state());
     //matrix_write_ln(matrix, read_timelog());
+    switch (get_highest_layer(layer_state)) {
+			case BASE:
+				matrix_write_ln(matrix, PSTR("Layer: BASE"));
+				break;
+			case MBO:
+				matrix_write_ln(matrix, PSTR("Layer: MBO"));
+				break;
+			case MEDR:
+				matrix_write_ln(matrix, PSTR("Layer: MEDR"));
+				break;
+			case NAVR:
+				matrix_write_ln(matrix, PSTR("Layer: NAVR"));
+				break;
+			case MOUR:
+				matrix_write_ln(matrix, PSTR("Layer: MOUR"));
+				break;
+			case NSSL:
+				matrix_write_ln(matrix, PSTR("Layer: NSSL"));
+				break;
+			case NSL:
+				matrix_write_ln(matrix, PSTR("Layer: NSL"));
+				break;
+			case FUNL:
+				matrix_write_ln(matrix, PSTR("Layer: FUNL"));
+				break;
+    }
   } else {
     matrix_write(matrix, read_logo());
   }
