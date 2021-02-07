@@ -3,8 +3,16 @@
 
 #pragma once
 
+// dkjer/apple_fn
+#define APPLE_FN_ENABLE
+
+// bilateral combinations
+// https://github.com/manna-harbour/qmk_firmware/blob/bilateral-combinations/docs/tap_hold.md#bilateral-combinations
+//#define BILATERAL_COMBINATIONS
+//#define BILATERAL_COMBINATIONS TAPPING_TERM * 2
+
 // default but used in macros
-#define TAPPING_TERM 200
+#define TAPPING_TERM 300
 
 // Prevent normal rollover on alphas from accidentally triggering mods.
 #define IGNORE_MOD_TAP_INTERRUPT
@@ -41,10 +49,10 @@
        N30,   N31,   K32,   K33,   K34,   K35,   K36,   K37,   N38,   N39 \
 ) \
 LAYOUT_split_3x6_3( \
-KC_TAB,  K00,   K01,   K02,   K03,   K04,   K05,   K06,   K07,   K08,   K09,   KC_BSLS, \
-KC_ESC,  K10,   K11,   K12,   K13,   K14,   K15,   K16,   K17,   K18,   K19,   KC_QUOT, \
-KC_MEH,  K20,   K21,   K22,   K23,   K24,   K25,   K26,   K27,   K28,   K29,   KC_MEH, \
-                       K32,   K33,   K34,   K35,   K36,   K37 \
+KC_TAB,      K00,   K01,   K02,   K03,   K04,   K05,   K06,   K07,   K08,   K09,   KC_BSLS, \
+KC_ESC,      K10,   K11,   K12,   K13,   K14,   K15,   K16,   K17,   K18,   K19,   KC_QUOT, \
+KC_APPLE_FN, K20,   K21,   K22,   K23,   K24,   K25,   K26,   K27,   K28,   K29,   MO(SET), \
+                           K32,   K33,   K34,   K35,   K36,   K37 \
 )
 
 // -=-=-=-=- crkbd customisation -=-=-=-=-
