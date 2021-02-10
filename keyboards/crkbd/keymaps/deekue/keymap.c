@@ -279,3 +279,32 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   return true;
 }
 
+
+uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        // longer hold for all home row mods, except shift
+        case LGUI_T(KC_A):
+        case LALT_T(KC_S):
+        case LCTL_T(KC_D):
+        case ALGR_T(KC_X):
+        case LCTL_T(KC_K):
+        case LALT_T(KC_L):
+        case LGUI_T(KC_COLN):
+        case ALGR_T(KC_DOT):
+            return TAPPING_TERM + 100;
+        // layer thumb keys
+        /*
+        case LT(MEDR, KC_ESC):
+        case LT(NAVR, KC_BSPC):
+        case LT(NAVR_MAC, KC_BSPC):
+        case LT(MOUR, KC_DEL):
+        case LT(NSSL, KC_ENT):
+        case LT(NSL,  KC_SPC):
+        case LT(FUNL, KC_TAB):
+            return TAPPING_TERM + ?;
+        */
+        default:
+            return TAPPING_TERM;
+    }
+}
+
