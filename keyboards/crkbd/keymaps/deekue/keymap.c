@@ -10,22 +10,25 @@
 #define U_NA KC_NO // present but not available for use
 #define U_NU KC_NO // available but not used
 
-enum layers { BASE_PC, BASE_MAC, MBO, MEDR, NAVR, NAVR_MAC, MOUR, NSSL, NSL, FUNL, SET };
+enum layers { BASE_QWERTY, BASE_COLEMAKDH, BASE_PC, BASE_MAC, MBO, MEDR, NAVR, NAVR_MAC, MOUR, NSSL, NSL, FUNL, SET };
+char base_layer_state_str[10];
 char layer_state_str[24];
-const char layer_label[11][10] = {
-  "Base", // PC
-  "Base", // Mac
+const char layer_label[13][10] = {
+  "Base", // QWERTY
+  "Base", // ColemakDH
+  "Base", // PC thumb keys
+  "Base", // Mac thumb keys
   "MBO",
   "Media",
   "Nav", // PC
   "Nav", // Mac
   "Mouse",
-  "Sym",
-  "Num",
-  "Fn",
+  "Symbols",
+  "Numbers",
+  "Function",
   "Settings"
 };
-char platform_str[9];
+char platform_str[10];
 const char platform_label[2][4] = {
   "PC",
   "Mac"
@@ -33,34 +36,10 @@ const char platform_label[2][4] = {
 
 enum custom_keys { 
   U_SET_PC = SAFE_RANGE,
-  U_SET_MAC
+  U_SET_MAC,
+  U_SET_QWERTY,
+  U_SET_COLEMAKDH
 };
-
-#if defined MIRYOKU_CLIPBOARD_FUN
-#define U_RDO KC_AGIN
-#define U_PST KC_PSTE
-#define U_CPY KC_COPY
-#define U_CUT KC_CUT
-#define U_UND KC_UNDO
-#elif defined MIRYOKU_CLIPBOARD_MAC
-#define U_RDO SCMD(KC_Z)
-#define U_PST LCMD(KC_V)
-#define U_CPY LCMD(KC_C)
-#define U_CUT LCMD(KC_X)
-#define U_UND LCMD(KC_Z)
-#elif defined MIRYOKU_CLIPBOARD_WIN
-#define U_RDO C(KC_Y)
-#define U_PST C(KC_V)
-#define U_CPY C(KC_C)
-#define U_CUT C(KC_X)
-#define U_UND C(KC_Z)
-#else
-#define U_RDO KC_AGIN
-#define U_PST S(KC_INS)
-#define U_CPY C(KC_INS)
-#define U_CUT S(KC_DEL)
-#define U_UND KC_UNDO
-#endif
 
 // copied from users/manna-harbour_miryoku/manna-harbour_miryoku.c
 // generated from users/manna-harbour_miryoku/miryoku.org  -*- buffer-read-only: t -*-
@@ -69,35 +48,31 @@ enum custom_keys {
 //#include "manna-harbour_miryoku.h"
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-#if defined MIRYOKU_ALPHAS_COLEMAKDH
-  [BASE] = LAYOUT_miryoku(
+  [BASE_COLEMAKDH] = LAYOUT_miryoku(
     KC_Q,              KC_W,              KC_F,              KC_P,              KC_B,              KC_J,              KC_L,              KC_U,              KC_Y,              KC_QUOT,
     LGUI_T(KC_A),      LALT_T(KC_R),      LCTL_T(KC_S),      LSFT_T(KC_T),      KC_G,              KC_K,              LSFT_T(KC_N),      LCTL_T(KC_E),      LALT_T(KC_I),      LGUI_T(KC_O),
     KC_Z,              ALGR_T(KC_X),      KC_C,              KC_D,              KC_V,              KC_M,              KC_H,              KC_COMM,           ALGR_T(KC_DOT),    KC_SLSH,
-    U_NP,              U_NP,              LT(MEDR, KC_ESC),  LT(NAVR, KC_SPC),  LT(MOUR, KC_TAB),  LT(NSSL, KC_ENT),  LT(NSL, KC_BSPC),  LT(FUNL, KC_DEL),  U_NP,              U_NP
+    U_NP,              U_NP,              LT(MEDR, KC_ESC),  LT(NAVR, KC_BSPC), LT(MOUR, KC_DEL),  LT(NSSL, KC_ENT),  LT(NSL, KC_SPC),   LT(FUNL, KC_TAB),  U_NP,              U_NP
   ),
-#elif defined MIRYOKU_ALPHAS_QWERTY
-  [BASE_PC] = LAYOUT_miryoku(
+  [BASE_QWERTY] = LAYOUT_miryoku(
     KC_Q,              KC_W,              KC_E,              KC_R,              KC_T,              KC_Y,              KC_U,              KC_I,              KC_O,              KC_P,
     LGUI_T(KC_A),      LALT_T(KC_S),      LCTL_T(KC_D),      LSFT_T(KC_F),      KC_G,              KC_H,              LSFT_T(KC_J),      LCTL_T(KC_K),      LALT_T(KC_L),      LGUI_T(KC_COLN),
     KC_Z,              ALGR_T(KC_X),      KC_C,              KC_V,              KC_B,              KC_N,              KC_M,              KC_COMM,           ALGR_T(KC_DOT),    KC_SLSH,
     U_NP,              U_NP,              LT(MEDR, KC_ESC),  LT(NAVR, KC_BSPC), LT(MOUR, KC_DEL),  LT(NSSL, KC_ENT),  LT(NSL, KC_SPC),   LT(FUNL, KC_TAB),  U_NP,              U_NP
   ),
+  [BASE_PC] = LAYOUT_miryoku(
+    KC_TRNS, KC_TRNS, KC_TRNS,          KC_TRNS,           KC_TRNS,          KC_TRNS,          KC_TRNS,         KC_TRNS, KC_TRNS, KC_TRNS,
+    KC_TRNS, KC_TRNS, KC_TRNS,          KC_TRNS,           KC_TRNS,          KC_TRNS,          KC_TRNS,         KC_TRNS, KC_TRNS, KC_TRNS,
+    KC_TRNS, KC_TRNS, KC_TRNS,          KC_TRNS,           KC_TRNS,          KC_TRNS,          KC_TRNS,         KC_TRNS, KC_TRNS, KC_TRNS,
+    U_NP,    U_NP,    LT(MEDR, KC_ESC), LT(NAVR, KC_BSPC), LT(MOUR, KC_DEL), LT(NSSL, KC_ENT), LT(NSL, KC_SPC), LT(FUNL, KC_TAB), U_NP,     U_NP
+  ),
   [BASE_MAC] = LAYOUT_miryoku(
-    KC_Q,              KC_W,              KC_E,              KC_R,              KC_T,              KC_Y,              KC_U,              KC_I,              KC_O,              KC_P,
-    LGUI_T(KC_A),      LALT_T(KC_S),      LCTL_T(KC_D),      LSFT_T(KC_F),      KC_G,              KC_H,              LSFT_T(KC_J),      LCTL_T(KC_K),      LALT_T(KC_L),      LGUI_T(KC_COLN),
-    KC_Z,              ALGR_T(KC_X),      KC_C,              KC_V,              KC_B,              KC_N,              KC_M,              KC_COMM,           ALGR_T(KC_DOT),    KC_SLSH,
-    U_NP,              U_NP,              LT(MEDR, KC_ESC),  LT(NAVR_MAC, KC_BSPC), LT(MOUR, KC_DEL),  LT(NSSL, KC_ENT),  LT(NSL, KC_SPC),   LT(FUNL, KC_TAB),  U_NP,              U_NP
+    KC_TRNS, KC_TRNS, KC_TRNS,          KC_TRNS,               KC_TRNS,          KC_TRNS,          KC_TRNS,         KC_TRNS,          KC_TRNS, KC_TRNS,
+    KC_TRNS, KC_TRNS, KC_TRNS,          KC_TRNS,               KC_TRNS,          KC_TRNS,          KC_TRNS,         KC_TRNS,          KC_TRNS, KC_TRNS,
+    KC_TRNS, KC_TRNS, KC_TRNS,          KC_TRNS,               KC_TRNS,          KC_TRNS,          KC_TRNS,         KC_TRNS,          KC_TRNS, KC_TRNS,
+    U_NP,    U_NP,    LT(MEDR, KC_ESC), LT(NAVR_MAC, KC_BSPC), LT(MOUR, KC_DEL), LT(NSSL, KC_ENT), LT(NSL, KC_SPC), LT(FUNL, KC_TAB), U_NP,    U_NP
   ),
-#else
-  [BASE] = LAYOUT_miryoku(
-    KC_Q,              KC_W,              KC_F,              KC_P,              KC_B,              KC_J,              KC_L,              KC_U,              KC_Y,              KC_QUOT,
-    LGUI_T(KC_A),      LALT_T(KC_R),      LCTL_T(KC_S),      LSFT_T(KC_T),      KC_G,              KC_M,              LSFT_T(KC_N),      LCTL_T(KC_E),      LALT_T(KC_I),      LGUI_T(KC_O),
-    KC_Z,              ALGR_T(KC_X),      KC_C,              KC_D,              KC_V,              KC_K,              KC_H,              KC_COMM,           ALGR_T(KC_DOT),    KC_SLSH,
-    U_NP,              U_NP,              LT(MEDR, KC_ESC),  LT(NAVR, KC_SPC),  LT(MOUR, KC_TAB),  LT(NSSL, KC_ENT),  LT(NSL, KC_BSPC),  LT(FUNL, KC_DEL),  U_NP,              U_NP
-  ),
-#endif
-#if defined MIRYOKU_NAV_VI
+//#if defined MIRYOKU_NAV_VI
   [NAVR] = LAYOUT_miryoku(
     RESET,   U_NA,    U_NA,    U_NA,    U_NA,    C(KC_Y), C(KC_V), C(KC_C), C(KC_X), C(KC_Z),
     KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, U_NA,    KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, KC_CAPS,
@@ -122,26 +97,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     U_NA,    KC_ALGR, U_NA,    U_NA,    U_NA,    U_NU,    U_NU,    U_NU,    U_NU,    U_NU,
     U_NP,    U_NP,    U_NA,    U_NA,    U_NA,    KC_MSTP, KC_MPLY, KC_MUTE, U_NP,    U_NP
   ),
-#else
-  [NAVR] = LAYOUT_miryoku(
-    RESET,   U_NA,    U_NA,    U_NA,    U_NA,    U_RDO,   U_PST,   U_CPY,   U_CUT,   U_UND,
-    KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, U_NA,    KC_CAPS, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT,
-    U_NA,    KC_ALGR, U_NA,    U_NA,    U_NA,    KC_INS,  KC_HOME, KC_PGDN, KC_PGUP, KC_END,
-    U_NP,    U_NP,    U_NA,    U_NA,    U_NA,    KC_ENT,  KC_BSPC, KC_DEL,  U_NP,    U_NP
-  ),
-  [MOUR] = LAYOUT_miryoku(
-    RESET,   U_NA,    U_NA,    U_NA,    U_NA,    U_NU,    U_NU,    U_NU,    U_NU,    U_NU,
-    KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, U_NA,    U_NU,    KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R,
-    U_NA,    KC_ALGR, U_NA,    U_NA,    U_NA,    U_NU,    KC_WH_L, KC_WH_D, KC_WH_U, KC_WH_R,
-    U_NP,    U_NP,    U_NA,    U_NA,    U_NA,    KC_BTN1, KC_BTN3, KC_BTN2, U_NP,    U_NP
-  ),
-  [MEDR] = LAYOUT_miryoku(
-    RESET,   U_NA,    U_NA,    U_NA,    U_NA,    RGB_TOG, RGB_MOD, RGB_HUI, RGB_SAI, RGB_VAI,
-    KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, U_NA,    U_NU,    KC_MPRV, KC_VOLD, KC_VOLU, KC_MNXT,
-    U_NA,    KC_ALGR, U_NA,    U_NA,    U_NA,    U_NU,    U_NU,    U_NU,    U_NU,    U_NU,
-    U_NP,    U_NP,    U_NA,    U_NA,    U_NA,    KC_MSTP, KC_MPLY, KC_MUTE, U_NP,    U_NP
-  ),
-#endif
   [MBO] = LAYOUT_miryoku(
     KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,     KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
     KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,     KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
@@ -167,10 +122,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     U_NP,    U_NP,    KC_LPRN, KC_RPRN, KC_UNDS,     U_NA, U_NA,    U_NA,    U_NP,    U_NP
   ),
   [SET] = LAYOUT_miryoku(
-    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,    KC_TRNS, KC_TRNS,   KC_TRNS, KC_TRNS, U_SET_PC,
-    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,    KC_TRNS, KC_TRNS,   KC_TRNS, KC_TRNS, KC_TRNS,
-    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,    KC_TRNS, U_SET_MAC, KC_TRNS, KC_TRNS, KC_TRNS,
-    U_NP,    U_NP,    KC_TRNS, KC_TRNS, KC_TRNS,    KC_TRNS, KC_TRNS,   KC_TRNS, U_NP,    U_NP
+    U_SET_QWERTY, KC_TRNS, KC_TRNS,         KC_TRNS, KC_TRNS,    KC_TRNS, KC_TRNS,   KC_TRNS, KC_TRNS, U_SET_PC,
+    KC_TRNS,      KC_TRNS, KC_TRNS,         KC_TRNS, KC_TRNS,    KC_TRNS, KC_TRNS,   KC_TRNS, KC_TRNS, KC_TRNS,
+    KC_TRNS,      KC_TRNS, U_SET_COLEMAKDH, KC_TRNS, KC_TRNS,    KC_TRNS, U_SET_MAC, KC_TRNS, KC_TRNS, KC_TRNS,
+    U_NP,         U_NP,    KC_TRNS,         KC_TRNS, KC_TRNS,    KC_TRNS, KC_TRNS,   KC_TRNS, U_NP,    U_NP
   )
 };
 
@@ -262,23 +217,37 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         // switch CTL<->GUI
         keymap_config.swap_lctl_lgui = false;
         // set default layer to PC
-        set_single_persistent_default_layer(BASE_PC);
+        //layer_move(BASE_PC);
       }
       return false;
     case U_SET_MAC:  
+      // TODO persist to EEPROM
       if (record->event.pressed) {
         // switch GUI<->CTL
         keymap_config.swap_lctl_lgui = true;
-        // set default layer to MAC
-        set_single_persistent_default_layer(BASE_MAC);
+        // set thumb layer keys to MAC
+        layer_on(BASE_MAC);
       }
       return false;
+    case U_SET_QWERTY:
+      if (record->event.pressed) {
+        // set default layer to QWERTY
+        set_single_persistent_default_layer(BASE_QWERTY);
+      }
+      return false;
+    case U_SET_COLEMAKDH:
+      // TODO display selected default layer on OLED
+      if (record->event.pressed) {
+        // set default layer to ColemakDH
+        set_single_persistent_default_layer(BASE_COLEMAKDH);
+      }
+      return false;
+
     default:
       return true; // Process all other keycodes normally
   }
   return true;
 }
-
 
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
