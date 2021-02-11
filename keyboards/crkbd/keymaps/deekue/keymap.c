@@ -122,10 +122,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     U_NP,    U_NP,    KC_LPRN, KC_RPRN, KC_UNDS,     U_NA, U_NA,    U_NA,    U_NP,    U_NP
   ),
   [SET] = LAYOUT_miryoku(
-    U_SET_QWERTY, KC_TRNS, KC_TRNS,         KC_TRNS, KC_TRNS,    KC_TRNS, KC_TRNS,   KC_TRNS, KC_TRNS, U_SET_PC,
-    KC_TRNS,      KC_TRNS, KC_TRNS,         KC_TRNS, KC_TRNS,    KC_TRNS, KC_TRNS,   KC_TRNS, KC_TRNS, KC_TRNS,
-    KC_TRNS,      KC_TRNS, U_SET_COLEMAKDH, KC_TRNS, KC_TRNS,    KC_TRNS, U_SET_MAC, KC_TRNS, KC_TRNS, KC_TRNS,
-    U_NP,         U_NP,    KC_TRNS,         KC_TRNS, KC_TRNS,    KC_TRNS, KC_TRNS,   KC_TRNS, U_NP,    U_NP
+    U_SET_QWERTY, U_NU, U_NU,            RESET,   U_NU, U_NU, U_NU,      U_NU, U_NU, U_SET_PC,
+    U_NU,         U_NU, DEBUG,           U_NU,    U_NU, U_NU, U_NU,      U_NU, U_NU, U_NU,
+    U_NU,         U_NU, U_SET_COLEMAKDH, U_NU,    U_NU, U_NU, U_SET_MAC, U_NU, U_NU, U_NU,
+    U_NP,         U_NP, U_NU,            U_NU,    U_NU, U_NU, U_NU,      U_NU, U_NP, U_NP
   )
 };
 
@@ -149,15 +149,15 @@ void matrix_init_user(void) {
 
 // When add source files to SRC in rules.mk, you can use functions.
 //const char *read_layer_state(void);
-//const char *read_logo(void);
-void set_keylog(uint16_t keycode, keyrecord_t *record);
-const char *read_keylog(void);
+const char *read_logo(void);
+//void set_keylog(uint16_t keycode, keyrecord_t *record);
+//const char *read_keylog(void);
 //const char *read_keylogs(void);
 
-const char *read_mode_icon(bool swap);
-const char *read_host_led_state(void);
-void set_timelog(void);
-const char *read_timelog(void);
+//const char *read_mode_icon(bool swap);
+//const char *read_host_led_state(void);
+//void set_timelog(void);
+//const char *read_timelog(void);
 
 void matrix_scan_user(void) {
    iota_gfx_task();
@@ -178,13 +178,13 @@ void matrix_render_user(struct CharacterMatrix *matrix) {
     // If you want to change the display of OLED, you need to change here
     matrix_write_ln(matrix, read_platform());
     matrix_write_ln(matrix, read_layer_state());
-    matrix_write_ln(matrix, read_host_led_state());
+    //matrix_write_ln(matrix, read_host_led_state());
     //matrix_write_ln(matrix, read_keylogs());
     //matrix_write_ln(matrix, read_mode_icon(keymap_config.swap_lctl_lgui));
   } else {
-    matrix_write_ln(matrix, read_timelog());
-    matrix_write_ln(matrix, read_keylog());
-    //matrix_write(matrix, read_logo());
+    //matrix_write_ln(matrix, read_timelog());
+    //matrix_write_ln(matrix, read_keylog());
+    matrix_write(matrix, read_logo());
   }
 }
 
@@ -204,12 +204,18 @@ void iota_gfx_task_user(void) {
 #endif//SSD1306OLED
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+#ifdef CONSOLE_ENABLE
+    uprintf("KL: kc: 0x%04X, col: %u, row: %u, pressed: %b, time: %u, interrupt: %b, count: %u\n", keycode, record->event.key.col, record->event.key.row, record->event.pressed, record->event.time, record->tap.interrupted, record->tap.count);
+#endif
+
+  /*
   if (record->event.pressed) {
 #ifdef SSD1306OLED
     set_keylog(keycode, record);
 #endif
     set_timelog();
   }
+  */
 
   switch (keycode) {
     case U_SET_PC:
@@ -242,6 +248,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         set_single_persistent_default_layer(BASE_COLEMAKDH);
       }
       return false;
+    case DEBUG:
+#ifdef CONSOLE_ENABLE
+      if (record->event.pressed) {
+        uprintf("DEBUG pressed");
+      }
+#endif
 
     default:
       return true; // Process all other keycodes normally

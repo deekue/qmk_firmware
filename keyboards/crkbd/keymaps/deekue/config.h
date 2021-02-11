@@ -3,6 +3,11 @@
 
 #pragma once
 
+// Debugging
+#define CONSOLE_ENABLE
+#define USER_PRINT
+#undef NO_PRINT
+
 // dkjer/apple_fn
 #define APPLE_FN_ENABLE
 
