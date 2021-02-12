@@ -204,9 +204,7 @@ void iota_gfx_task_user(void) {
 #endif//SSD1306OLED
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-#ifdef CONSOLE_ENABLE
-    uprintf("KL: kc: 0x%04X, col: %u, row: %u, pressed: %b, time: %u, interrupt: %b, count: %u\n", keycode, record->event.key.col, record->event.key.row, record->event.pressed, record->event.time, record->tap.interrupted, record->tap.count);
-#endif
+    dprintf("KL: kc: 0x%04X, col: %u, row: %u, pressed: %b, time: %u, interrupt: %b, count: %u\n", keycode, record->event.key.col, record->event.key.row, record->event.pressed, record->event.time, record->tap.interrupted, record->tap.count);
 
   /*
   if (record->event.pressed) {
@@ -249,11 +247,27 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       }
       return false;
     case DEBUG:
-#ifdef CONSOLE_ENABLE
+      // borrowed from https://github.com/qmk/qmk_firmware/blob/master/keyboards/dmqdesign/spin/keymaps/spidey3_pad/keymap.c#L154
       if (record->event.pressed) {
-        uprintf("DEBUG pressed");
-      }
+#ifndef NO_DEBUG
+				if (!debug_enable) {
+						debug_enable = 1;
+				} else if (!debug_keyboard) {
+						debug_keyboard = 1;
+				} else if (!debug_matrix) {
+						debug_matrix = 1;
+				} else {
+						debug_enable   = 0;
+						debug_keyboard = 0;
+						debug_matrix   = 0;
+				}
+				eeconfig_update_debug(debug_config.raw);
 #endif
+#ifdef CONSOLE_ENABLE
+				uprintf("DEBUG: enable=%u, keyboard=%u, matrix=%u\n", debug_enable, debug_keyboard, debug_matrix);
+#endif
+			}
+      return false;
 
     default:
       return true; // Process all other keycodes normally
