@@ -1,19 +1,32 @@
+# RGB
+RGBLIGHT_ENABLE = yes
+#RGB_MATRIX_ENABLE = WS2812
+
 # Miryoku customisations
 MIRYOKU_ALPHAS = QWERTY
 MIRYOKU_NAV = VI
 MIRYOKU_CLIPBOARD = FUN
 
-# crkdbd customisations
-#COMMAND_ENABLE = yes
-OLED_DRIVER_ENABLE = yes
+# TODO migrate to new OLED driver
+OLED_DRIVER_ENABLE = no
+
+# shrink
+ENABLE_LTO = yes
+CFLAGS += -flto
+CONSOLE_ENABLE = no
+COMMAND_ENABLE = no
+BOOTMAGIC_ENABLE = no
+COMBO_ENABLE = no
+ENCODER_ENABLE = no
+
 
 # If you want to change the display of OLED, you need to change here
 SRC +=  ./lib/glcdfont.c \
-        ./lib/logo_reader.c \
+        ./lib/mode_icon_reader.c \
+        #./lib/logo_reader.c \
         #./lib/host_led_state_reader.c \
         #./lib/timelogger.c \
         #./lib/keylogger.c \
-        #./lib/mode_icon_reader.c \
         # ./lib/rgb_state_reader.c \
         # ./lib/layer_state_reader.c \
 

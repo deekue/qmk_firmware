@@ -3,10 +3,23 @@
 
 #pragma once
 
+// Console/User print
+//#define CONSOLE_ENABLE
+//#define USER_PRINT
+//#undef NO_PRINT
+
 // Debugging
-#define CONSOLE_ENABLE
-#define USER_PRINT
-#undef NO_PRINT
+#ifndef NO_DEBUG
+#define NO_DEBUG
+#endif // !NO_DEBUG
+#if !defined(NO_PRINT) && !defined(CONSOLE_ENABLE)
+#define NO_PRINT
+#endif // !NO_PRINT
+
+// Shrink
+#define NO_ACTION_MACRO
+#define NO_ACTION_FUNCTION
+#define NO_ACTION_ONESHOT
 
 // dkjer/apple_fn
 #define APPLE_FN_ENABLE
@@ -74,4 +87,15 @@ KC_APPLE_FN, K20,   K21,   K22,   K23,   K24,   K25,   K26,   K27,   K28,   K29,
 #define USE_SERIAL_PD2
 
 #define SSD1306OLED
+
+#ifdef RGBLIGHT_ENABLE
+#define RGBLIGHT_LIMIT_VAL 150
+#define RGBLIGHT_LAYERS 
+#define RGBLIGHT_LAYERS_OVERRIDE_RGB_OFF // light layers when animations off. 
+#define RGBLIGHT_EFFECT_RGB_TEST
+#define RGBLIGHT_SLEEP  // lights off when host sleeps
+#ifndef RGBLIGHT_SPLIT
+#  define RGBLIGHT_SPLIT // defined elsewhere?
+#endif // !RGBLIGHT_SPLIT
+#endif
 

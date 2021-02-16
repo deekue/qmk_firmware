@@ -10,30 +10,29 @@
 #define U_NA KC_NO // present but not available for use
 #define U_NU KC_NO // available but not used
 
-enum layers { BASE_QWERTY, BASE_COLEMAKDH, BASE_RSTHD, BASE_PC, BASE_MAC, MBO, MEDR, NAVR, NAVR_MAC, MOUR, NSSL, NSL, FUNL, SET };
-char base_layer_state_str[10];
+enum layers {
+  BASE_QWERTY,
+#ifdef MIRYOKU_ALPHAS_COLEMAKDH
+  BASE_COLEMAKDH,
+#endif
+#ifdef MIRYOKU_ALPHAS_RSTHD
+  BASE_RSTHD,
+#endif
+  BASE_PC,
+  BASE_MAC,
+#ifdef MIRYOKU_TRACKPOINT
+  MBO,
+#endif
+  MEDR,
+  NAVR,
+  NAVR_MAC,
+  MOUR,
+  NSSL,
+  NSL,
+  FUNL,
+  SET
+};
 char layer_state_str[24];
-const char layer_label[14][10] = {
-  "Base", // QWERTY
-  "Base", // ColemakDH
-  "Base", // RSTHD
-  "Base", // PC thumb keys
-  "Base", // Mac thumb keys
-  "MBO",
-  "Media",
-  "Nav", // PC
-  "Nav", // Mac
-  "Mouse",
-  "Symbols",
-  "Numbers",
-  "Function",
-  "Settings"
-};
-char platform_str[10];
-const char platform_label[2][4] = {
-  "PC",
-  "Mac"
-};
 
 enum custom_keys { 
   U_SET_PC = SAFE_RANGE,
@@ -56,18 +55,22 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_Z,              ALGR_T(KC_X),      KC_C,              KC_V,              KC_B,              KC_N,              KC_M,              KC_COMM,           ALGR_T(KC_DOT),    KC_SLSH,
     U_NP,              U_NP,              LT(MEDR, KC_ESC),  LT(NAVR, KC_BSPC), LT(MOUR, KC_DEL),  LT(NSSL, KC_ENT),  LT(NSL, KC_SPC),   LT(FUNL, KC_TAB),  U_NP,              U_NP
   ),
+#ifdef MIRYOKU_ALPHAS_COLEMAKDH
   [BASE_COLEMAKDH] = LAYOUT_miryoku(
     KC_Q,              KC_W,              KC_F,              KC_P,              KC_B,              KC_J,              KC_L,              KC_U,              KC_Y,              KC_QUOT,
     LGUI_T(KC_A),      LALT_T(KC_R),      LCTL_T(KC_S),      LSFT_T(KC_T),      KC_G,              KC_K,              LSFT_T(KC_N),      LCTL_T(KC_E),      LALT_T(KC_I),      LGUI_T(KC_O),
     KC_Z,              ALGR_T(KC_X),      KC_C,              KC_D,              KC_V,              KC_M,              KC_H,              KC_COMM,           ALGR_T(KC_DOT),    KC_SLSH,
     U_NP,              U_NP,              LT(MEDR, KC_ESC),  LT(NAVR, KC_BSPC), LT(MOUR, KC_DEL),  LT(NSSL, KC_ENT),  LT(NSL, KC_SPC),   LT(FUNL, KC_TAB),  U_NP,              U_NP
   ),
+#endif
+#ifdef MIRYOKU_ALPHAS_RSTHD
   [BASE_RSTHD] = LAYOUT_miryoku(
     KC_J,         KC_C,         KC_Y,         KC_F,         KC_K, KC_Z, KC_L,         KC_COMM,      KC_U,            KC_Q,
     LGUI_T(KC_R), LALT_T(KC_S), LCTL_T(KC_T), LSFT_T(KC_H), KC_D, KC_M, LSFT_T(KC_N), LCTL_T(KC_A), LALT_T(KC_I),    LGUI_T(KC_O),
     KC_BSLS,      ALGR_T(KC_V), KC_G,         KC_P,         KC_B, KC_X, KC_W,         KC_DOT,       ALGR_T(KC_SCLN), KC_MINS,
     U_NP, U_NP, LT(MEDR, KC_ESC), LT(NAVR, KC_E), LT(MOUR, KC_BSPC),    LT(NSSL, KC_ENT), LT(NSL, KC_SPC), LT(FUNL, KC_TAB), U_NP, U_NP
   ),
+#endif
   [BASE_MAC] = LAYOUT_miryoku(
     KC_TRNS, KC_TRNS, KC_TRNS,          KC_TRNS,               KC_TRNS,          KC_TRNS,          KC_TRNS,         KC_TRNS,          KC_TRNS, KC_TRNS,
     KC_TRNS, KC_TRNS, KC_TRNS,          KC_TRNS,               KC_TRNS,          KC_TRNS,          KC_TRNS,         KC_TRNS,          KC_TRNS, KC_TRNS,
@@ -99,12 +102,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     U_NA,    KC_ALGR, U_NA,    U_NA,    U_NA,    U_NU,    U_NU,    U_NU,    U_NU,    U_NU,
     U_NP,    U_NP,    U_NA,    U_NA,    U_NA,    KC_MSTP, KC_MPLY, KC_MUTE, U_NP,    U_NP
   ),
+#ifdef MIRYOKU_TRACKPOINT
   [MBO] = LAYOUT_miryoku(
     KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,     KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
     KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,     KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
     KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,     KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
     U_NP,    U_NP,    KC_TRNS, KC_TRNS, KC_TRNS,     KC_BTN1, KC_BTN3, KC_BTN2, U_NP,    U_NP
   ),
+#endif
   [FUNL] = LAYOUT_miryoku(
     KC_F12,  KC_F7,   KC_F8,   KC_F9,   KC_PSCR,     U_NA, U_NA,    U_NA,    U_NA,    RESET,
     KC_F11,  KC_F4,   KC_F5,   KC_F6,   KC_SLCK,     U_NA, KC_LSFT, KC_LCTL, KC_LALT, KC_LGUI,
@@ -137,9 +142,6 @@ extern uint8_t is_master;
 
 
 void matrix_init_user(void) {
-    #ifdef RGBLIGHT_ENABLE
-      RGB_current_mode = rgblight_config.mode;
-    #endif
     //SSD1306 OLED init, make sure to add #define SSD1306OLED in config.h
     #ifdef SSD1306OLED
         iota_gfx_init(!has_usb());   // turns on the display
@@ -151,12 +153,12 @@ void matrix_init_user(void) {
 
 // When add source files to SRC in rules.mk, you can use functions.
 //const char *read_layer_state(void);
-const char *read_logo(void);
+//const char *read_logo(void);
 //void set_keylog(uint16_t keycode, keyrecord_t *record);
 //const char *read_keylog(void);
 //const char *read_keylogs(void);
 
-//const char *read_mode_icon(bool swap);
+const char *read_mode_icon(bool swap);
 //const char *read_host_led_state(void);
 //void set_timelog(void);
 //const char *read_timelog(void);
@@ -166,27 +168,62 @@ void matrix_scan_user(void) {
 }
 
 const char* read_layer_state(void) {
-  snprintf(layer_state_str, sizeof(layer_state_str), "Layer: %s", layer_label[get_highest_layer(layer_state)]);
+  switch (get_highest_layer(layer_state)) {
+    case BASE_QWERTY:
+#ifdef MIRYOKU_ALPHAS_COLEMAKDH
+    case BASE_COLEMAKDH:
+#endif
+#ifdef MIRYOKU_ALPHAS_RSTHD
+    case BASE_RSTHD:
+#endif
+    case BASE_PC:
+    case BASE_MAC:
+      snprintf(layer_state_str, sizeof(layer_state_str), "Layer: Base");
+      break;
+#ifdef MIRYOKU_TRACKPOINT
+    case MBO:
+      snprintf(layer_state_str, sizeof(layer_state_str), "Layer: Trackpoint");
+      break;
+#endif
+    case MEDR:
+      snprintf(layer_state_str, sizeof(layer_state_str), "Layer: Media");
+      break;
+    case NAVR:
+    case NAVR_MAC:
+      snprintf(layer_state_str, sizeof(layer_state_str), "Layer: Nav");
+      break;
+    case MOUR:
+      snprintf(layer_state_str, sizeof(layer_state_str), "Layer: Mouse");
+      break;
+    case NSSL:
+      snprintf(layer_state_str, sizeof(layer_state_str), "Layer: Symbols");
+      break;
+    case NSL:
+      snprintf(layer_state_str, sizeof(layer_state_str), "Layer: Numbers");
+      break;
+    case FUNL:
+      snprintf(layer_state_str, sizeof(layer_state_str), "Layer: Function");
+      break;
+    case SET:
+      snprintf(layer_state_str, sizeof(layer_state_str), "Layer: Settings");
+      break;
+    default:
+      snprintf(layer_state_str, sizeof(layer_state_str), "Layer: Unknown");
+  }
   return layer_state_str;
-}
-
-const char* read_platform(void) {
-  snprintf(platform_str, sizeof(platform_str), "OS: %s", platform_label[keymap_config.swap_lctl_lgui]);
-  return platform_str;
 }
 
 void matrix_render_user(struct CharacterMatrix *matrix) {
   if (is_master) {
     // If you want to change the display of OLED, you need to change here
-    matrix_write_ln(matrix, read_platform());
     matrix_write_ln(matrix, read_layer_state());
     //matrix_write_ln(matrix, read_host_led_state());
     //matrix_write_ln(matrix, read_keylogs());
-    //matrix_write_ln(matrix, read_mode_icon(keymap_config.swap_lctl_lgui));
   } else {
     //matrix_write_ln(matrix, read_timelog());
     //matrix_write_ln(matrix, read_keylog());
-    matrix_write(matrix, read_logo());
+    //matrix_write(matrix, read_logo());
+    matrix_write_ln(matrix, read_mode_icon(!keymap_config.swap_lctl_lgui));
   }
 }
 
@@ -242,18 +279,22 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       }
       return false;
     case U_SET_COLEMAKDH:
+#ifdef MIRYOKU_ALPHAS_COLEMAKDH
       // TODO display selected default layer on OLED
       if (record->event.pressed) {
         // set default layer to ColemakDH
         set_single_persistent_default_layer(BASE_COLEMAKDH);
       }
+#endif
       return false;
     case U_SET_RSTHD:
+#ifdef MIRYOKU_ALPHAS_RSTHD
       // TODO display selected default layer on OLED
       if (record->event.pressed) {
         // set default layer to ColemakDH
         set_single_persistent_default_layer(BASE_RSTHD);
       }
+#endif
       return false;
     case DEBUG:
       // borrowed from https://github.com/qmk/qmk_firmware/blob/master/keyboards/dmqdesign/spin/keymaps/spidey3_pad/keymap.c#L154
@@ -295,7 +336,9 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
         case LALT_T(KC_L):
         case LGUI_T(KC_COLN):
         case ALGR_T(KC_DOT):
+#ifdef MIRYOKU_ALPHAS_RSTHD
         case LT(NAVR, KC_E):  // RSTHD left thumb
+#endif
             return TAPPING_TERM + 100;
         // layer thumb keys
         /*
@@ -312,4 +355,8 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
             return TAPPING_TERM;
     }
 }
+
+//TODO https://beta.docs.qmk.fm/using-qmk/hardware-features/lighting/feature_rgblight#lighting-layers
+#ifdef RGBLIGHT_ENABLE
+#endif
 
