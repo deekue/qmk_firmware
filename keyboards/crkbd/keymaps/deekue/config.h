@@ -3,19 +3,6 @@
 
 #pragma once
 
-// Console/User print
-//#define CONSOLE_ENABLE
-//#define USER_PRINT
-//#undef NO_PRINT
-
-// Debugging
-#ifndef NO_DEBUG
-#define NO_DEBUG
-#endif // !NO_DEBUG
-#if !defined(NO_PRINT) && !defined(CONSOLE_ENABLE)
-#define NO_PRINT
-#endif // !NO_PRINT
-
 // Shrink
 #define NO_ACTION_MACRO
 #define NO_ACTION_FUNCTION
@@ -80,22 +67,39 @@ KC_APPLE_FN, K20,   K21,   K22,   K23,   K24,   K25,   K26,   K27,   K28,   K29,
 
 /* Select hand configuration */
 
-#define MASTER_LEFT
+// #define MASTER_LEFT
 // #define MASTER_RIGHT
-// #define EE_HANDS
+#define EE_HANDS
 
 #define USE_SERIAL_PD2
 
-#define SSD1306OLED
-
-#ifdef RGBLIGHT_ENABLE
-#define RGBLIGHT_LIMIT_VAL 150
-#define RGBLIGHT_LAYERS 
-#define RGBLIGHT_LAYERS_OVERRIDE_RGB_OFF // light layers when animations off. 
-#define RGBLIGHT_EFFECT_RGB_TEST
-#define RGBLIGHT_SLEEP  // lights off when host sleeps
-#ifndef RGBLIGHT_SPLIT
-#  define RGBLIGHT_SPLIT // defined elsewhere?
-#endif // !RGBLIGHT_SPLIT
+// OLED displays
+#ifdef OLED_DRIVER_ENABLE
+  #define OLED_TIMEOUT 30000 // ms
+  #define MY_OLED_TIMEOUT
 #endif
 
+#ifdef RGBLIGHT_ENABLE
+  #if defined MY_RGB_UNDERGLOW
+    #undef RGBLED_NUM
+    #define RGBLED_NUM 6
+  #endif
+  #define RGBLIGHT_LIMIT_VAL 120
+  #define RGBLIGHT_LAYERS 
+  #define RGBLIGHT_LAYERS_OVERRIDE_RGB_OFF // light layers when animations off. 
+  #define RGBLIGHT_SLEEP  // lights off when host sleeps
+  #ifndef RGBLIGHT_SPLIT
+    #define RGBLIGHT_SPLIT // defined elsewhere?
+  #endif // !RGBLIGHT_SPLIT
+//  #define RGBLIGHT_EFFECT_RGB_TEST
+#endif
+
+/*
+// Debugging
+#ifdef MY_DEBUG
+  #undef NO_DEBUG
+#endif // !NO_DEBUG
+#if !defined(NO_PRINT) && !defined(CONSOLE_ENABLE)
+  #define NO_PRINT
+#endif // !NO_PRINT
+*/

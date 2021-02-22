@@ -1,10 +1,16 @@
 // copied from users/manna-harbour_miryoku/manna-harbour_miryoku.h
-// generated from users/manna-harbour_miryoku/miryoku.org  -*- buffer-read-only: t -*-
-
-// disable for customisation
-//#pragma once
 
 #include QMK_KEYBOARD_H
+#include "split_util.h"
+
+#if defined OLED_DRIVER_ENABLE
+#include "mh_image.h"
+#endif
+
+#ifdef RGBLIGHT_ENABLE
+//Following line allows macro to read current RGB settings
+extern rgblight_config_t rgblight_config;
+#endif
 
 #define U_NP KC_NO // key is not present
 #define U_NA KC_NO // present but not available for use
@@ -42,12 +48,6 @@ enum custom_keys {
   U_SET_RSTHD
 };
 
-// copied from users/manna-harbour_miryoku/manna-harbour_miryoku.c
-// generated from users/manna-harbour_miryoku/miryoku.org  -*- buffer-read-only: t -*-
-
-// disable for customisation
-//#include "manna-harbour_miryoku.h"
-
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [BASE_QWERTY] = LAYOUT_miryoku(
     KC_Q,              KC_W,              KC_E,              KC_R,              KC_T,              KC_Y,              KC_U,              KC_I,              KC_O,              KC_P,
@@ -80,7 +80,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 //#if defined MIRYOKU_NAV_VI
   [NAVR] = LAYOUT_miryoku(
     RESET,   U_NA,    U_NA,    U_NA,    U_NA,    C(KC_Y), C(KC_V), C(KC_C), C(KC_X), C(KC_Z),
-    KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, U_NA,    KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, KC_CAPS,
+    KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, U_NA,    KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, S(KC_CAPS),
     U_NA,    KC_ALGR, U_NA,    U_NA,    U_NA,    KC_HOME, KC_PGDN, KC_PGUP, KC_END,  KC_INS,
     U_NP,    U_NP,    U_NA,    U_NA,    U_NA,    KC_ENT,  KC_SPC,  KC_TAB,  U_NP,    U_NP
   ),
@@ -136,20 +136,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   )
 };
 
-// copied from keymaps/default/keymap.c
-
 extern uint8_t is_master;
 
-
-void matrix_init_user(void) {
-    //SSD1306 OLED init, make sure to add #define SSD1306OLED in config.h
-    #ifdef SSD1306OLED
-        iota_gfx_init(!has_usb());   // turns on the display
-    #endif
-}
-
-//SSD1306 OLED update loop, make sure to add #define SSD1306OLED in config.h
-#ifdef SSD1306OLED
+// MY_OLED_DRIVER = old || new
+#if defined SSD1306OLED || defined OLED_DRIVER_ENABLE 
 
 // When add source files to SRC in rules.mk, you can use functions.
 //const char *read_layer_state(void);
@@ -162,10 +152,6 @@ const char *read_mode_icon(bool swap);
 //const char *read_host_led_state(void);
 //void set_timelog(void);
 //const char *read_timelog(void);
-
-void matrix_scan_user(void) {
-   iota_gfx_task();
-}
 
 const char* read_layer_state(void) {
   switch (get_highest_layer(layer_state)) {
@@ -213,8 +199,70 @@ const char* read_layer_state(void) {
   return layer_state_str;
 }
 
+#ifdef OLED_DRIVER_ENABLE 
+static uint32_t my_oled_timer;
+
+void my_draw_image(bool capslock) {
+
+/*
+  static const char PROGMEM qmk_logo[] = {
+    0x80,0x81,0x82,0x83,0x84,0x85,0x86,0x87,0x88,0x89,0x8a,0x8b,0x8c,0x8d,0x8e,0x8f,0x90,0x91,0x92,0x93,0x94,
+    0xa0,0xa1,0xa2,0xa3,0xa4,0xa5,0xa6,0xa7,0xa8,0xa9,0xaa,0xab,0xac,0xad,0xae,0xaf,0xb0,0xb1,0xb2,0xb3,0xb4,
+    0xc0,0xc1,0xc2,0xc3,0xc4,0xc5,0xc6,0xc7,0xc8,0xc9,0xca,0xcb,0xcc,0xcd,0xce,0xcf,0xd0,0xd1,0xd2,0xd3,0xd4,0
+  };
+*/
+
+/*
+#if defined CONSOLE_ENABLE
+    uprintf("my_draw_image: capslock %s\n", capslock ? "on" : "off");
+#endif
+*/
+  if (capslock) {
+    //oled_write_P(qmk_logo, false);
+    //oled_write_P(miryoku_image, false);
+    oled_write_raw_P(mh_image, mh_image_size);
+  } else {
+    oled_off();
+  }
+}
+
+oled_rotation_t oled_init_user(oled_rotation_t rotation) {
+  return isLeftHand || mh_image_portrait ? rotation : OLED_ROTATION_180;
+}
+
+void oled_task_user(void) {
+  /*
+  #if defined CONSOLE_ENABLE
+  uprintf("my_oled_timer elapsed: %d\n", (int)timer_elapsed32(my_oled_timer));
+  #endif
+  */
+  if (timer_elapsed32(my_oled_timer) > OLED_TIMEOUT) {
+    oled_off();
+    return;
+  }
+  if (isLeftHand) {
+    oled_write_ln(read_layer_state(), false);
+    oled_write_ln("", false);
+    oled_write_ln(read_mode_icon(!keymap_config.swap_lctl_lgui), false);
+  } else {
+    my_draw_image(host_keyboard_leds() & (1<<USB_LED_CAPS_LOCK));
+//    oled_scroll_left();
+  }
+}
+#endif // OLED_DRIVER_ENABLE 
+
+#ifdef SSD1306OLED
+void matrix_init_user(void) {
+    //SSD1306 OLED init
+    iota_gfx_init(!has_usb());   // turns on the display
+}
+
+void matrix_scan_user(void) {
+   iota_gfx_task();
+}
+
 void matrix_render_user(struct CharacterMatrix *matrix) {
-  if (is_master) {
+  if (isLeftHand) {
     // If you want to change the display of OLED, you need to change here
     matrix_write_ln(matrix, read_layer_state());
     //matrix_write_ln(matrix, read_host_led_state());
@@ -240,7 +288,8 @@ void iota_gfx_task_user(void) {
   matrix_render_user(&matrix);
   matrix_update(&display, &matrix);
 }
-#endif//SSD1306OLED
+#endif // SSD1306OLED 
+#endif// SSD1306OLED || OLED_ENABLE
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     dprintf("KL: kc: 0x%04X, col: %u, row: %u, pressed: %b, time: %u, interrupt: %b, count: %u\n", keycode, record->event.key.col, record->event.key.row, record->event.pressed, record->event.time, record->tap.interrupted, record->tap.count);
@@ -253,6 +302,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     set_timelog();
   }
   */
+#ifdef OLED_DRIVER_ENABLE
+  if (record->event.pressed) {
+    my_oled_timer = timer_read32();
+  }
+#endif // defined OLED_DRIVER_ENABLE
 
   switch (keycode) {
     case U_SET_PC:
@@ -360,3 +414,9 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 #ifdef RGBLIGHT_ENABLE
 #endif
 
+#ifdef MY_DEBUG
+void keyboard_post_init_user(void) {
+  debug_enable = true;
+  //debug_mouse = true;
+}
+#endif
