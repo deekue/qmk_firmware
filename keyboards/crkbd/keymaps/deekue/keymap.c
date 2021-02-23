@@ -24,7 +24,6 @@ enum layers {
 #ifdef MIRYOKU_ALPHAS_RSTHD
   BASE_RSTHD,
 #endif
-  BASE_PC,
   BASE_MAC,
 #ifdef MIRYOKU_TRACKPOINT
   MBO,
@@ -162,9 +161,10 @@ const char* read_layer_state(void) {
 #ifdef MIRYOKU_ALPHAS_RSTHD
     case BASE_RSTHD:
 #endif
-    case BASE_PC:
-    case BASE_MAC:
       snprintf(layer_state_str, sizeof(layer_state_str), "Layer: Base");
+      break;
+    case BASE_MAC:
+      snprintf(layer_state_str, sizeof(layer_state_str), "Layer: Base(Mac)");
       break;
 #ifdef MIRYOKU_TRACKPOINT
     case MBO:
@@ -175,8 +175,10 @@ const char* read_layer_state(void) {
       snprintf(layer_state_str, sizeof(layer_state_str), "Layer: Media");
       break;
     case NAVR:
-    case NAVR_MAC:
       snprintf(layer_state_str, sizeof(layer_state_str), "Layer: Nav");
+      break;
+    case NAVR_MAC:
+      snprintf(layer_state_str, sizeof(layer_state_str), "Layer: Nav(Mac)");
       break;
     case MOUR:
       snprintf(layer_state_str, sizeof(layer_state_str), "Layer: Mouse");
@@ -243,7 +245,13 @@ void oled_task_user(void) {
   if (isLeftHand) {
     oled_write_ln(read_layer_state(), false);
     oled_write_ln("", false);
-    oled_write_ln(read_mode_icon(!keymap_config.swap_lctl_lgui), false);
+    oled_write(read_mode_icon(!keymap_config.swap_lctl_lgui), false);
+    oled_write("  ", false);
+    if (is_master && (host_keyboard_leds() & (1<<USB_LED_CAPS_LOCK))) {
+      oled_write_ln("CAPS!", false);
+    } else {
+      oled_write_ln("     ", false);
+    }
   } else {
     my_draw_image(host_keyboard_leds() & (1<<USB_LED_CAPS_LOCK));
 //    oled_scroll_left();
@@ -314,7 +322,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         // switch CTL<->GUI
         keymap_config.swap_lctl_lgui = false;
         // set default layer to PC
-        //layer_move(BASE_PC);
+        // TODO make Mac/PC switch separate from Alphas layout
+        layer_move(BASE_QWERTY);
       }
       return false;
     case U_SET_MAC:  

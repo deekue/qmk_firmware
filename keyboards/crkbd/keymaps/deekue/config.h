@@ -94,12 +94,3 @@ KC_APPLE_FN, K20,   K21,   K22,   K23,   K24,   K25,   K26,   K27,   K28,   K29,
 //  #define RGBLIGHT_EFFECT_RGB_TEST
 #endif
 
-/*
-// Debugging
-#ifdef MY_DEBUG
-  #undef NO_DEBUG
-#endif // !NO_DEBUG
-#if !defined(NO_PRINT) && !defined(CONSOLE_ENABLE)
-  #define NO_PRINT
-#endif // !NO_PRINT
-*/
