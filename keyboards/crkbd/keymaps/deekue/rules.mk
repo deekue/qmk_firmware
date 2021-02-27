@@ -6,7 +6,7 @@ MIRYOKU_CLIPBOARD = FUN
 # TODO migrate to new OLED driver
 MY_OLED_DRIVER = new # off, old, new
 MY_RGB = underglow # off, underglow, light, matrix
-MY_DEBUG = yes # yes, no
+MY_DEBUG = no # yes, no
 
 # shrink
 ENABLE_LTO = yes
