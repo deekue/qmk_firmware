@@ -71,7 +71,6 @@ KC_APPL, K20, K21, K22, K23, K24, XXX, XXX,   XXX, XXX, K25, K26, K27, K28, K29,
 // OLED displays
 #ifdef OLED_DRIVER_ENABLE
   #define OLED_TIMEOUT 30000 // ms
-  #define MY_OLED_TIMEOUT
 
   // Kyria OLED
   #define OLED_DISPLAY_128X64
