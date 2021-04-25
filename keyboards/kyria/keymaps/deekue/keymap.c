@@ -26,11 +26,11 @@ enum layers {
 #endif
   MEDR,
   NAVR,
-  NAVR_MAC,
   MOUR,
   NSSL,
   NSL,
   FUNL,
+  NAVR_MAC,
   SET
 };
 
@@ -398,13 +398,85 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     }
 }
 
-//TODO https://beta.docs.qmk.fm/using-qmk/hardware-features/lighting/feature_rgblight#lighting-layers
-#ifdef RGBLIGHT_ENABLE
-#endif
+// See https://beta.docs.qmk.fm/using-qmk/hardware-features/lighting/feature_rgblight#lighting-layers
+#ifdef RGBLIGHT_LAYERS
+const rgblight_segment_t PROGMEM my_capslock_layer[] = RGBLIGHT_LAYER_SEGMENTS(
+    {0, RGBLED_NUM, HSV_RED} // Don't drive angry
+);
+const rgblight_segment_t PROGMEM my_base_layer[] = RGBLIGHT_LAYER_SEGMENTS(
+    {0, RGBLED_NUM, 0} // overrides capslock, don't light base layer
+);
 
-#ifdef MY_DEBUG
+// Colours based on Miryoku refernce image https://github.com/manna-harbour/miryoku
+// LHS Layers
+const rgblight_segment_t PROGMEM my_NSSL_layer[] = RGBLIGHT_LAYER_SEGMENTS(
+    {0, RGBLED_NUM / 2, HSV_GREEN}
+);
+const rgblight_segment_t PROGMEM my_NSL_layer[] = RGBLIGHT_LAYER_SEGMENTS(
+    {0, RGBLED_NUM / 2, HSV_BLUE}
+);
+const rgblight_segment_t PROGMEM my_FUNL_layer[] = RGBLIGHT_LAYER_SEGMENTS(
+    {0, RGBLED_NUM / 2, HSV_RED}
+);
+
+// RHS Layers
+const rgblight_segment_t PROGMEM my_MEDR_layer[] = RGBLIGHT_LAYER_SEGMENTS(
+    {RGBLED_NUM / 2, RGBLED_NUM, HSV_MAGENTA}
+);
+const rgblight_segment_t PROGMEM my_NAVR_layer[] = RGBLIGHT_LAYER_SEGMENTS(
+    {RGBLED_NUM / 2, RGBLED_NUM, HSV_CYAN}
+);
+const rgblight_segment_t PROGMEM my_MOUR_layer[] = RGBLIGHT_LAYER_SEGMENTS(
+    {RGBLED_NUM / 2, RGBLED_NUM, HSV_YELLOW}
+);
+
+// Now define the array of layers. Later layers take precedence
+#define MY_RGBLIGHT_LAYER_OFFSET(layer) (layer - MEDR + 2)
+const rgblight_segment_t* const PROGMEM my_rgb_layers[] = RGBLIGHT_LAYERS_LIST(
+    my_base_layer,
+    my_capslock_layer,
+    [MY_RGBLIGHT_LAYER_OFFSET(MEDR)] = my_MEDR_layer,
+    [MY_RGBLIGHT_LAYER_OFFSET(NAVR)] = my_NAVR_layer,
+    [MY_RGBLIGHT_LAYER_OFFSET(MOUR)] = my_MOUR_layer,
+    [MY_RGBLIGHT_LAYER_OFFSET(NSSL)] = my_NSSL_layer,
+    [MY_RGBLIGHT_LAYER_OFFSET(NSL)]  = my_NSL_layer,
+    [MY_RGBLIGHT_LAYER_OFFSET(FUNL)] = my_FUNL_layer
+);
+
+layer_state_t layer_state_set_user(layer_state_t state) {
+    rgblight_set_layer_state(MY_RGBLIGHT_LAYER_OFFSET(MEDR), layer_state_cmp(state, MEDR));
+    rgblight_set_layer_state(MY_RGBLIGHT_LAYER_OFFSET(NAVR), layer_state_cmp(state, NAVR) || layer_state_cmp(state, NAVR_MAC));
+    rgblight_set_layer_state(MY_RGBLIGHT_LAYER_OFFSET(MOUR), layer_state_cmp(state, MOUR));
+    rgblight_set_layer_state(MY_RGBLIGHT_LAYER_OFFSET(NSSL), layer_state_cmp(state, NSSL));
+    rgblight_set_layer_state(MY_RGBLIGHT_LAYER_OFFSET(NSL),  layer_state_cmp(state, NSL));
+    rgblight_set_layer_state(MY_RGBLIGHT_LAYER_OFFSET(FUNL), layer_state_cmp(state, FUNL));
+    return state;
+}
+
+bool led_update_user(led_t led_state) {
+    rgblight_set_layer_state(1, led_state.caps_lock);
+    return true;
+}
+
+/*
+// TODO add this for alt base layers
+layer_state_t default_layer_state_set_user(layer_state_t state) {
+    rgblight_set_layer_state(1, layer_state_cmp(state, _DVORAK));
+    return state;
+}
+*/
+
+#endif  // RGBLIGHT_LAYERS
+
+#if defined MY_DEBUG || defined RGBLIGHT_LAYERS
 void keyboard_post_init_user(void) {
+# ifdef MY_DEBUG
   debug_enable = true;
   //debug_mouse = true;
+# endif
+
+# ifdef RGBLIGHT_LAYERS
+  rgblight_layers = my_rgb_layers;
+# endif
 }
 #endif

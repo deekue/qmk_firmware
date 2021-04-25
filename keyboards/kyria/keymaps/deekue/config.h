@@ -79,12 +79,11 @@ XXX,     K20, K21, K22, K23, K24, XXX, XXX,   XXX, XXX, K25, K26, K27, K28, K29,
 #ifdef RGBLIGHT_ENABLE
   #define RGBLIGHT_LIMIT_VAL 120 // keep low to reduce power draw
   #define RGBLIGHT_LAYERS
-  #define RGBLIGHT_LAYERS_OVERRIDE_RGB_OFF // light layers when animations off.
+// with RGB off and layer override on, only slave lights up!?
+//  #define RGBLIGHT_LAYERS_OVERRIDE_RGB_OFF // light layers when animations off.
+  #define RGBLIGHT_DEFAULT_VAL 0  // so leave RGB on, but not glowing
   #define RGBLIGHT_SLEEP  // lights off when host sleeps
-  #ifndef RGBLIGHT_SPLIT
-    #define RGBLIGHT_SPLIT // defined elsewhere?
-  #endif // !RGBLIGHT_SPLIT
-//  #define RGBLIGHT_EFFECT_RGB_TEST
+  #define RGBLIGHT_SPLIT
 #endif
 
 // If you are using an Elite C rev3 on the slave side, uncomment the lines below:
