@@ -58,8 +58,8 @@
 ) \
 LAYOUT( \
 KC_TAB,  K00, K01, K02, K03, K04,                       K05, K06, K07, K08, K09, KC_BSLS, \
-KC_ESC,  K10, K11, K12, K13, K14,                       K15, K16, K17, K18, K19, KC_QUOT, \
-KC_APPL, K20, K21, K22, K23, K24, XXX, XXX,   XXX, XXX, K25, K26, K27, K28, K29, MO(SET), \
+KC_APPL, K10, K11, K12, K13, K14,                       K15, K16, K17, K18, K19, KC_QUOT, \
+XXX,     K20, K21, K22, K23, K24, XXX, XXX,   XXX, XXX, K25, K26, K27, K28, K29, MO(SET), \
                    XXX, XXX, K32, K33, K34,   K35, K36, K37, XXX, XXX \
 )
 
@@ -78,8 +78,8 @@ KC_APPL, K20, K21, K22, K23, K24, XXX, XXX,   XXX, XXX, K25, K26, K27, K28, K29,
 
 #ifdef RGBLIGHT_ENABLE
   #define RGBLIGHT_LIMIT_VAL 120 // keep low to reduce power draw
-  #define RGBLIGHT_LAYERS 
-  #define RGBLIGHT_LAYERS_OVERRIDE_RGB_OFF // light layers when animations off. 
+  #define RGBLIGHT_LAYERS
+  #define RGBLIGHT_LAYERS_OVERRIDE_RGB_OFF // light layers when animations off.
   #define RGBLIGHT_SLEEP  // lights off when host sleeps
   #ifndef RGBLIGHT_SPLIT
     #define RGBLIGHT_SPLIT // defined elsewhere?

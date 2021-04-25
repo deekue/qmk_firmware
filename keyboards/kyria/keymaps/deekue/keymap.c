@@ -34,7 +34,7 @@ enum layers {
   SET
 };
 
-enum custom_keys { 
+enum custom_keys {
   U_SET_PC = SAFE_RANGE,
   U_SET_MAC,
   U_SET_QWERTY,
@@ -133,7 +133,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 extern uint8_t is_master;
 
 // MY_OLED_DRIVER = old || new
-#if defined OLED_DRIVER_ENABLE 
+#if defined OLED_DRIVER_ENABLE
 
 oled_rotation_t oled_init_user(oled_rotation_t rotation) {
 	return OLED_ROTATION_180;
@@ -270,10 +270,11 @@ void oled_task_user(void) {
     render_kyria_logo();
   }
 }
-#endif // OLED_DRIVER_ENABLE 
+#endif // OLED_DRIVER_ENABLE
 
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+  static uint16_t kc_appl_timer;  // tap-hold on Fn
     dprintf("KL: kc: 0x%04X, col: %u, row: %u, pressed: %b, time: %u, interrupt: %b, count: %u\n", keycode, record->event.key.col, record->event.key.row, record->event.pressed, record->event.time, record->tap.interrupted, record->tap.count);
 
 #ifdef OLED_DRIVER_ENABLE
@@ -283,6 +284,18 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 #endif // defined OLED_DRIVER_ENABLE
 
   switch (keycode) {
+    case KC_APPL:  // tap-hold MacOS/Fn or PC/GUI
+      if (record->event.pressed) {
+        kc_appl_timer = timer_read();
+        register_code(keymap_config.swap_lctl_lgui ? KC_APPL : KC_LGUI);
+      } else {
+        unregister_code(keymap_config.swap_lctl_lgui ? KC_APPL : KC_LGUI);
+        if (timer_elapsed(kc_appl_timer) < TAPPING_TERM) {
+          register_code(KC_ESC);
+        }
+      }
+      return false;
+
     case U_SET_PC:
       if (record->event.pressed) {
         // switch CTL<->GUI
@@ -292,7 +305,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         layer_move(BASE_QWERTY);
       }
       return false;
-    case U_SET_MAC:  
+    case U_SET_MAC:
       // TODO persist to EEPROM
       if (record->event.pressed) {
         // switch GUI<->CTL
