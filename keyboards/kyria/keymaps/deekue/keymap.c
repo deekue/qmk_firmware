@@ -291,7 +291,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       } else {
         unregister_code(keymap_config.swap_lctl_lgui ? KC_APPL : KC_LGUI);
         if (timer_elapsed(kc_appl_timer) < TAPPING_TERM) {
-          register_code(KC_ESC);
+          tap_code16(KC_ESC);
         }
       }
       return false;
